@@ -16,7 +16,7 @@ ui <- navbarPage(
     "Happiness",
     sidebarLayout(
       sidebarPanel(),
-      mainPanel()
+      mainPanel(plotlyOutput("interactive_map"))
     )
   )
   

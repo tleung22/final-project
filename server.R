@@ -23,28 +23,29 @@ my_server <- function(input, output) {
     l <- list(color = toRGB("white"), width = 2)
     # specify some map projection/options
     g <- list(
-      scope = 'usa',
-      projection = list(type = 'albers usa'),
+      scope = "usa",
+      projection = list(type = "albers usa"),
       showlakes = TRUE,
-      lakecolor = toRGB('white')
+      lakecolor = toRGB("white")
     )
     
-    p <- plot_geo(joined_data, locationmode = 'USA-states') %>%
+    map <- plot_geo(joined_data, locationmode = "USA-states") %>%
       add_trace(
         z = joined_data$happiness_score, text = joined_data$hover,
         locations = joined_data$state,
-        color = joined_data$happiness_score, colors = 'Purples'
+        color = joined_data$happiness_score, colors = "Blues"
       ) %>%
       colorbar(title = "Happiness Score") %>%
       layout(
         title = "Happiness vs Guns",
         geo = g
       )
+    return(map)
     
   })
 }
 
-df <- read.csv("https://raw.githubusercontent.com/plotly/datasets/master/2011_us_ag_exports.csv")
+
 
 
 
