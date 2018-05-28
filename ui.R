@@ -16,15 +16,19 @@ ui <- navbarPage(
     "Happiness",
     sidebarLayout(
       sidebarPanel(
-        radioButtons("yaxis", "View Happiness Score by Percent of Gun Ownership OR Rate of Gun Related Deaths per 100k People:",
-                     choiceNames = c("Percent of Gun Ownership", "Rate of Gun Related Deaths per 100k People"),
-                     choiceValues = c("percown", "rate")
+        radioButtons("yaxis", "View Happiness Score by Rate of Gun Related Deaths per 100k People OR Percent of Gun Ownership:",
+                     choiceNames = c("Rate of Gun Related Deaths per 100k People", "Percent of Gun Ownership"),
+                     choiceValues = c("rate", "percown")
                      
                      
         )
       ),
       mainPanel(
+        h1("Comparing State Happiness with Gun Related Data"),
+        p("Description of happiness score and other useful infomation. Describe the importance/significance of comparing happiness with gun data."),
+        h3("Interactive Scatter Plot"),
         plotlyOutput("scatter_plot"),
+        h3("Interactive Map"),
         plotlyOutput("interactive_map")
       )
     )

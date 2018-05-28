@@ -45,7 +45,7 @@ my_server <- function(input, output) {
       ) %>%
       colorbar(title = "Happiness Score") %>%
       layout(
-        title = "Happiness vs Guns",
+        title = "Happiness and Gun Related Data for Each State",
         geo = g
       )
     return(map)
@@ -62,13 +62,17 @@ my_server <- function(input, output) {
       title <- "Happiness Score by Rate of Gun Related Deaths per 100k People"
       yaxis <- "Rate of Gun Related Deaths per 100k People"
     }
-    p <- plot_ly(data = joined_data, x = joined_data$happiness_score,
-                 y = y
+    p <- plot_ly(data = joined_data,
+                 x = joined_data$happiness_score,
+                 color = I("black")
                 ) %>%
-      add_markers(size = 10, text = joined_data$state,
-                       color = "rgba(255, 182, 193, .9)",
-                       line = list(color = "rgba(152, 0, 0, .8)",
-                                   width = 2)) %>% 
+      add_markers(y = y,
+                  text = paste(joined_data$state, "<br>", "Happiness Rank:",
+                               joined_data$happiness_rank),
+                  showlegend = FALSE) %>% 
+      add_lines(y = ~fitted(loess(y ~ happiness_score)),
+                line = list(color = "rgba(220, 0, 0, 0.62)"),
+                showlegend = FALSE) %>%
       layout(title = title,
              yaxis = list(title = yaxis, zeroline = FALSE),
              xaxis = list(title = "Happiness Score", zeroline = FALSE))
