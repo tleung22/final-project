@@ -22,6 +22,7 @@ joined_data <- full_join(joined_data, shootings)
 joined_data <- full_join(joined_data, state_deaths)
 joined_data <- full_join(joined_data, gun_ownership)
 
+
 my_server <- function(input, output) {
   output$interactive_map <- renderPlotly({
     joined_data$hover <- with(joined_data, paste(state, "<br>", "Happiness Rank:", happiness_rank,
