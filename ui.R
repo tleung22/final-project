@@ -15,8 +15,18 @@ ui <- navbarPage(
   tabPanel(
     "Happiness",
     sidebarLayout(
-      sidebarPanel(),
-      mainPanel(plotlyOutput("interactive_map"))
+      sidebarPanel(
+        radioButtons("yaxis", "View Happiness Score by Percent of Gun Ownership OR Rate of Gun Related Deaths per 100k People:",
+                     choiceNames = c("Percent of Gun Ownership", "Rate of Gun Related Deaths per 100k People"),
+                     choiceValues = c("percown", "rate")
+                     
+                     
+        )
+      ),
+      mainPanel(
+        plotlyOutput("scatter_plot"),
+        plotlyOutput("interactive_map")
+      )
     )
   ),
   #bar chart

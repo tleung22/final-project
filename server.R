@@ -9,18 +9,21 @@ gun_industry <- read.csv("Data/gun_industry.csv", stringsAsFactors = FALSE)
 legislation <- read.csv("Data/legislation.csv", stringsAsFactors = FALSE)
 gun_crime <- read.csv("Data/US gun crime - SUMMARY 2011.csv", stringsAsFactors = FALSE)
 gun_ownership <- read.csv("Data/gun_ownership.csv", stringsAsFactors = FALSE)
+gun_ownership$percown <- as.numeric(gsub("%", "", gun_ownership$percown))
 background_checks <- read.csv("Data/nics-firearm-background-checks.csv", stringsAsFactors = FALSE)
+state_deaths <- read.csv("Data/firearm2016.csv", stringsAsFactors = FALSE)
 
+mass_shootings <- mass_shootings %>% 
+  group_by(state) %>% 
+  summarise(fatalities = sum(fatalities), injured = sum(injured),
+            total_victims = sum(total_victims))
+joined_data <- merge(happiness, gun_industry, by = "state")
+joined_data <- full_join(joined_data, mass_shootings)
+joined_data <- full_join(joined_data, state_deaths)
+joined_data <- full_join(joined_data, gun_ownership)
 
 my_server <- function(input, output) {
   output$interactive_map <- renderPlotly({
-    mass_shootings <- mass_shootings %>% 
-      group_by(state) %>% 
-      summarise(fatalities = sum(fatalities), injured = sum(injured),
-                total_victims = sum(total_victims))
-    joined_data <- merge(happiness, gun_industry, by = "state")
-    joined_data <- full_join(joined_data, mass_shootings)
-    
     joined_data$hover <- with(joined_data, paste(state, "<br>", "Happiness Rank:", happiness_rank,
                               "<br>", "Gun Industry Rank:", industry_rank,
                               "<br>", "Total Victims:", total_victims))
@@ -38,7 +41,7 @@ my_server <- function(input, output) {
       add_trace(
         z = joined_data$happiness_score, text = joined_data$hover,
         locations = joined_data$state,
-        color = joined_data$happiness_score, colors = "Blues"
+        color = joined_data$happiness_score, colors = "Reds"
       ) %>%
       colorbar(title = "Happiness Score") %>%
       layout(
@@ -48,6 +51,30 @@ my_server <- function(input, output) {
     return(map)
   })
   
+  # Scatter plot
+  output$scatter_plot <- renderPlotly({
+    if (input$yaxis == "percown") {
+      y <- joined_data$percown
+      title <- "Happiness Score by Percent of Gun Ownership"
+      yaxis <- "Percent of Gun Ownership"
+    } else if (input$yaxis == "rate") {
+      y <- joined_data$rate
+      title <- "Happiness Score by Rate of Gun Related Deaths per 100k People"
+      yaxis <- "Rate of Gun Related Deaths per 100k People"
+    }
+    p <- plot_ly(data = joined_data, x = joined_data$happiness_score,
+                 y = y
+                ) %>%
+      add_markers(size = 10, text = joined_data$state,
+                       color = "rgba(255, 182, 193, .9)",
+                       line = list(color = "rgba(152, 0, 0, .8)",
+                                   width = 2)) %>% 
+      layout(title = title,
+             yaxis = list(title = yaxis, zeroline = FALSE),
+             xaxis = list(title = "Happiness Score", zeroline = FALSE))
+  })
+
+
   state_ab <- as.vector(happiness$state)
   states <- as.vector(legislation$state)
   output$shootings <- renderPlotly({
