@@ -103,6 +103,7 @@ my_server <- function(input, output) {
     legislation <- merge(legislation, shootings, all = TRUE, by = "state")
     legislation[is.na(legislation)] <- 0
     legislation <- select(legislation, total_shootings, lawtotal, state)
+    legislation$state <- factor(legislation$state, levels = unique(legislation$state)[order(legislation$total_shootings, decreasing = TRUE)])
     p <- plot_ly(legislation, x = ~state, y = ~lawtotal, type = "bar", name = "legislation") %>%
       add_trace(y = ~total_shootings, name = "shootings") %>%
       layout(yaxis = list(title = "Count"), barmode = "group")
