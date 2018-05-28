@@ -25,7 +25,7 @@ ui <- navbarPage(
       ),
       mainPanel(
         h1("Comparing State Happiness with Gun Related Data"),
-        p("Description of happiness score and other useful infomation. Describe the importance/significance of comparing happiness with gun data."),
+        p("Description of happiness score and other useful infomation. Describe the importance/significance of comparing happiness with gun data. Describe what questions this page is trying to answer."),
         h3("Interactive Scatter Plot"),
         plotlyOutput("scatter_plot"),
         h3("Interactive Map"),

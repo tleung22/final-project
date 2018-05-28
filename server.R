@@ -18,9 +18,9 @@ mass_shootings <- mass_shootings %>%
   summarise(fatalities = sum(fatalities), injured = sum(injured),
             total_victims = sum(total_victims))
 joined_data <- merge(happiness, gun_industry, by = "state")
-joined_data <- full_join(joined_data, mass_shootings)
-joined_data <- full_join(joined_data, state_deaths)
-joined_data <- full_join(joined_data, gun_ownership)
+joined_data <- full_join(joined_data, mass_shootings, by = "state")
+joined_data <- full_join(joined_data, state_deaths, by = "state")
+joined_data <- full_join(joined_data, gun_ownership, by = "state")
 
 my_server <- function(input, output) {
   output$interactive_map <- renderPlotly({
