@@ -48,16 +48,28 @@ my_server <- function(input, output) {
     return(map)
   })
   
+  state_ab <- as.vector(happiness$state)
+  states <- as.vector(legislation$state)
   output$shootings <- renderPlotly({
-    validate(need(input$radio == 1))
+    validate(need(input$radio == 1, message = FALSE))
   })
 
   output$casualties <- renderPlotly({
-    validate(need(input$radio == 2))
+    validate(need(input$radio == 2, message = FALSE))
   })
   
   output$legislation <- renderPlotly({
-    validate(need(input$radio == 3))
+    shootings <- group_by(mass_shootings, state) %>%
+      summarise(total_shootings = n())
+    legislation$state <- state_ab
+    legislation <- merge(legislation, shootings, all = TRUE, by = "state")
+    legislation[is.na(legislation)] <- 0
+    validate(need(input$radio == 3, message = FALSE))
+    p <- plot_ly(legislation, x = ~state, y = ~lawtotal, type = "bar", name = "legislation") %>%
+      add_trace(y = ~total_shootings, name = "shootings") %>%
+      layout(yaxis = list(title = "Count"), barmode = "group")
+    
+    return(p)
   })
 }
 
