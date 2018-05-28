@@ -13,12 +13,12 @@ gun_ownership$percown <- as.numeric(gsub("%", "", gun_ownership$percown))
 background_checks <- read.csv("Data/nics-firearm-background-checks.csv", stringsAsFactors = FALSE)
 state_deaths <- read.csv("Data/firearm2016.csv", stringsAsFactors = FALSE)
 
-mass_shootings <- mass_shootings %>% 
+shootings <- mass_shootings %>% 
   group_by(state) %>% 
   summarise(fatalities = sum(fatalities), injured = sum(injured),
             total_victims = sum(total_victims))
 joined_data <- merge(happiness, gun_industry, by = "state")
-joined_data <- full_join(joined_data, mass_shootings)
+joined_data <- full_join(joined_data, shootings)
 joined_data <- full_join(joined_data, state_deaths)
 joined_data <- full_join(joined_data, gun_ownership)
 
@@ -78,15 +78,21 @@ my_server <- function(input, output) {
              xaxis = list(title = "Happiness Score", zeroline = FALSE))
   })
 
-
+  #state abbreviations
   state_ab <- as.vector(happiness$state)
+  #state names
   states <- as.vector(legislation$state)
-  output$shootings <- renderPlotly({
-    validate(need(input$radio == 1, message = FALSE))
-  })
-
-  output$casualties <- renderPlotly({
-    validate(need(input$radio == 2, message = FALSE))
+  
+  output$industry <- renderPlotly({
+    legislation$state <- state_ab
+    industry <- select(gun_industry, industry_score, state)
+    legislation <- merge(legislation, industry, by = "state")
+    p <- plot_ly(legislation, x = ~industry_score) %>%
+      add_markers(y = ~lawtotal, text = legislation$state, showlegend = FALSE) %>%
+      add_lines(y = ~fitted(loess(lawtotal ~ industry_score)))
+    
+    return(p)
+    
   })
   
   output$legislation <- renderPlotly({
@@ -95,7 +101,7 @@ my_server <- function(input, output) {
     legislation$state <- state_ab
     legislation <- merge(legislation, shootings, all = TRUE, by = "state")
     legislation[is.na(legislation)] <- 0
-    validate(need(input$radio == 3, message = FALSE))
+    legislation <- select(legislation, total_shootings, lawtotal, state)
     p <- plot_ly(legislation, x = ~state, y = ~lawtotal, type = "bar", name = "legislation") %>%
       add_trace(y = ~total_shootings, name = "shootings") %>%
       layout(yaxis = list(title = "Count"), barmode = "group")
