@@ -1,4 +1,5 @@
 library(shiny)
+library(shinythemes)
 library(dplyr)
 library(plotly)
 
@@ -131,9 +132,10 @@ my_server <- function(input, output) {
       title <- "State Gun Legislation vs State Murder & Manslaughter per 100K"
       yaxis <- "State Murder & Manslaughter per 100,000"
     }
-    p <- plot_ly(legislation, x = ~lawtotal) %>%
+    p <- plot_ly(legislation, x = ~lawtotal, color = I("black")) %>%
       add_markers(y = y, text = legislation$state, showlegend = FALSE) %>%
-      add_lines(x = ~lawtotal, y = ~fitted(loess(y ~ lawtotal))) %>%
+      add_lines(x = ~lawtotal, y = ~fitted(loess(y ~ lawtotal)),
+                line = list(color = "rgba(220, 0, 0, 0.62)")) %>%
       layout(yaxis = list(title = yaxis, zeroline = FALSE), xaxis = list(title = "Numer of State Gun Control Laws"),
              title = title)
     
@@ -179,8 +181,8 @@ my_server <- function(input, output) {
     legislation[is.na(legislation)] <- 0
     legislation <- select(legislation, total_shootings, lawtotal, state)
     legislation$state <- factor(legislation$state, levels = unique(legislation$state)[order(legislation$total_shootings, decreasing = TRUE)])
-    p <- plot_ly(legislation, x = ~state, y = ~lawtotal, type = "bar", name = "legislation") %>%
-      add_trace(y = ~total_shootings, name = "shootings") %>%
+    p <- plot_ly(legislation, x = ~state, y = ~lawtotal, type = "bar", name = "legislation", color = I("black")) %>%
+      add_trace(y = ~total_shootings, name = "shootings", color = I("red")) %>%
       layout(yaxis = list(title = "Count"), xaxis = list(title = "State"), title = "State Gun Control VS Mass Shootings", barmode = "group")
     
     return(p)

@@ -107,7 +107,7 @@ ui <- navbarPage(
     "Legislation",
     sidebarLayout(
       sidebarPanel(
-        radioButtons("legislation", label = h3("Legislation Comparrisons"),
+        radioButtons("legislation", label = h3("Legislation Comparisons"),
           choices = list("Gun Industry" = 1, "Gun Ownership" = 2, "Violent Crime" = 3, "Murder & Manslaughter" = 4) 
           )
       ),
