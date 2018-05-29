@@ -22,6 +22,9 @@ joined_data <- full_join(joined_data, shootings, by = "state")
 joined_data <- full_join(joined_data, state_deaths, by = "state")
 joined_data <- full_join(joined_data, gun_ownership, by = "state")
 
+legislation$state <- joined_data$state
+crime <- select(joined_data, Violent.Crime...per.100.000..2013, state, Murder.and.nonnegligent.manslaughter..per.100K..2013, percown, industry_score)
+legislation <- merge(legislation, crime, by = "state")
 
 my_server <- function(input, output) {
   output$interactive_map <- renderPlotly({
@@ -108,9 +111,6 @@ my_server <- function(input, output) {
   })
 
   output$legis_scatter <- renderPlotly({
-    legislation$state <- joined_data$state
-    crime <- select(joined_data, Violent.Crime...per.100.000..2013, state, Murder.and.nonnegligent.manslaughter..per.100K..2013, percown, industry_score)
-    legislation <- merge(legislation, crime, by = "state")
     if (input$legislation == 1) {
       y <- legislation$industry_score
       title <- "State Gun Legislation vs State Gun Industry"
@@ -138,10 +138,40 @@ my_server <- function(input, output) {
     
   })
   
+  output$legis_cor <- renderText({
+    if (input$legislation == 1) {
+      y <- legislation$industry_score
+      cor <- cor(legislation$lawtotal, y)
+    } else if (input$legislation == 2) {
+      y <- legislation$percown
+      cor <- cor(legislation$lawtotal, y)
+    } else if (input$legislation == 3){
+      y <- legislation$Violent.Crime...per.100.000..2013
+      cor <- cor(legislation$lawtotal, y)
+    } else {
+      y <- legislation$Murder.and.nonnegligent.manslaughter..per.100K..2013
+      cor <- cor(legislation$lawtotal, y)
+    }
+    correlation <- paste("Correlation:", cor)
+    return(correlation)
+  })
+  
+  output$legis_cor_message <- renderText({
+    if (input$legislation == 1) {
+      message <- "This moderate negative correlation shows that state gun control negatively impacts the state's gun industry."
+    } else if (input$legislation == 2) {
+      message <- "This moderate negative correlation shows that state gun control somewhat reduces state gun ownership."
+    } else if (input$legislation == 3) {
+      message <- "This slight negative correlation shows that state gun control has a minimal effect on reducing the rate of violent crime"
+    } else {
+      message <- "This slight negative correlation shows that state gun control has a small impact on reducing the rate of murder and manslaughter"
+    }
+    return(message)
+  })
+  
   output$legislation_bar <- renderPlotly({
     shootings <- group_by(mass_shootings, state) %>%
       summarise(total_shootings = n())
-    legislation$state <- joined_data$state
     legislation <- merge(legislation, shootings, all = TRUE, by = "state")
     legislation[is.na(legislation)] <- 0
     legislation <- select(legislation, total_shootings, lawtotal, state)

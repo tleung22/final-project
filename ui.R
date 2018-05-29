@@ -64,7 +64,8 @@ ui <- navbarPage(
       mainPanel(
         plotlyOutput("legislation_bar"),
         plotlyOutput("legis_scatter"),
-        textOutput("legis_cor")
+        textOutput("legis_cor"),
+        textOutput("legis_cor_message")
       )
     )
   ),
