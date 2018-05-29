@@ -53,11 +53,14 @@ ui <- navbarPage(
     "Legislation",
     sidebarLayout(
       sidebarPanel(
-
+        radioButtons("legislation", label = h3("Radio buttons"),
+          choices = list("Gun Industry" = 1, "Gun Ownership" = 2, "Violent Crime" = 3, "Murder & Manslaughter" = 4) 
+          )
       ),
       mainPanel(
-        plotlyOutput("legislation"),
-        plotlyOutput("industry")
+        plotlyOutput("legislation_bar"),
+        plotlyOutput("legis_scatter"),
+        textOutput("legis_cor")
       )
     )
   ),
