@@ -7,7 +7,31 @@ ui <- navbarPage(
   
   # Introduction tab
   tabPanel(
-    "Introduction"
+    "Introduction",
+    h1("Why It Matters"),
+    em("The United States has been vicitim to 101 mass shootings this calendar,"),
+    em("accroding to the following article by"),
+    a("Business Insider",
+      href = "http://www.businessinsider.com/how-many-mass-shootings-in-america-this-year-2018-2","."),
+    em("More worrisome however, is the continious lack of action from our elected officials in Washington D.C."),
+    em("to get anything done in order to address this ongoing issue that has claimed so many innoncent lives."),
+    h2("Our Purpose"),
+    em("Our mission behind this project is not take sides or shift the blame from one side to another!"),
+    em("Instead, our goal is to simply prompt awareness to an issue that has almost become like something of a"),
+    em("normality nowadays, unfortunately. Furthermore, we want to make it very clear that this no way, shape, or form"),
+    em(" mean't to come off as a"), strong("attack"),
+    em("or"), strong("challenge"), em("to gun owners and those who believe and support the 2nd Amendment."),
+    em("Instead, the goal of our work to spurr healthy dialogue amongst all spectrums so that we can all work"),
+    em("together to find a solution. No kid should be afraid to attend school and no parent should have to fear"),
+    em("for their child's safety."),
+    h3("Meet The Team:"),
+    tags$img(src= '33895746_1417277445084602_4308802712805310464_n.jpg', height =200, width =200),
+    tags$img(src= '33850842_961835110646127_8613901815181737984_n.jpg', height =200, width = 200),
+    tags$img(src= '33835367_2093832907496109_6306088030159503360_n.jpg', height = 200, width = 200),
+    tags$img(src = 'IMG_3992.jpg', height = 200, width = 200)
+    
+  
+    
     
   ),
   
