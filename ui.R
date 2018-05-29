@@ -25,11 +25,28 @@ ui <- navbarPage(
     em("together to find a solution. No kid should be afraid to attend school and no parent should have to fear"),
     em("for their child's safety."),
     h3("Meet The Team:"),
-    tags$img(src= '33895746_1417277445084602_4308802712805310464_n.jpg', height =200, width =200),
-    tags$img(src= '33850842_961835110646127_8613901815181737984_n.jpg', height =200, width = 200),
-    tags$img(src= '33835367_2093832907496109_6306088030159503360_n.jpg', height = 200, width = 200),
-    tags$img(src = 'IMG_3992.jpg', height = 200, width = 200)
-    
+    div(
+      div(
+        tags$img(src= '33895746_1417277445084602_4308802712805310464_n.jpg', height =200, width =200),
+        br(),
+        em("test")
+      ),
+      div(
+        tags$img(src= '33850842_961835110646127_8613901815181737984_n.jpg', height =200, width = 200),
+        br(),
+        em("test")
+      ),
+      div(
+        tags$img(src= '33835367_2093832907496109_6306088030159503360_n.jpg', height = 200, width = 200),
+        br(),
+        em("test")
+      ),
+      div(
+        tags$img(src = 'IMG_3992.jpg', height = 200, width = 200),
+        br(),
+        em("test")
+      )
+    )
   
     
     
@@ -107,12 +124,12 @@ ui <- navbarPage(
         a("State gun crime/ownership", href = "http://demographicdata.org/facts-and-figures/gun-ownership-statistics/"),
         br(),
         br(),
-        plotlyOutput("legislation_bar"),
-        br(),
-        br(),
         plotlyOutput("legis_scatter"),
         textOutput("legis_cor"),
-        textOutput("legis_cor_message")
+        textOutput("legis_cor_message"),
+        br(),
+        br(),
+        plotlyOutput("legislation_bar")
       )
     )
   ),
