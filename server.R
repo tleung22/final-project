@@ -107,38 +107,32 @@ my_server <- function(input, output) {
     return(message)
   })
 
-  #state abbreviations
-  state_ab <- as.vector(joined_data$state)
-  #state names
-  states <- as.vector(legislation$state)
-  selected <- reactive({
-    selected <- input$legislation
-  })
   output$legis_scatter <- renderPlotly({
-    legislation$state <- state_ab
+    legislation$state <- joined_data$state
     crime <- select(joined_data, Violent.Crime...per.100.000..2013, state, Murder.and.nonnegligent.manslaughter..per.100K..2013, percown, industry_score)
     legislation <- merge(legislation, crime, by = "state")
     if (input$legislation == 1) {
       y <- legislation$industry_score
-      title <- "Happiness Score by Rate of Gun Related Deaths per 100k People"
+      title <- "State Gun Legislation vs State Gun Industry"
       yaxis <- "State Gun Industry Score"
     } else if (input$legislation == 2) {
       y <- legislation$percown
-      title <- "Happiness Score by Rate of Gun Related Deaths per 100k People"
+      title <- "State Gun Legislation vs State Gun Ownership Percentage"
       yaxis <- "State Percent Gun Ownership"
     } else if (input$legislation == 3){
       y <- legislation$Violent.Crime...per.100.000..2013
-      title <- "Happiness Score by Rate of Gun Related Deaths per 100k People"
+      title <- "State Gun Legislation vs State Violent Crime per 100K"
       yaxis <- "State Violent Crime per 100,000"
     } else {
       y <- legislation$Murder.and.nonnegligent.manslaughter..per.100K..2013
-      title <- "Happiness Score by Rate of Gun Related Deaths per 100k People"
+      title <- "State Gun Legislation vs State Murder & Manslaughter per 100K"
       yaxis <- "State Murder & Manslaughter per 100,000"
     }
     p <- plot_ly(legislation, x = ~lawtotal) %>%
       add_markers(y = y, text = legislation$state, showlegend = FALSE) %>%
       add_lines(x = ~lawtotal, y = ~fitted(loess(y ~ lawtotal))) %>%
-      layout(yaxis = list(title = yaxis), xaxis = list(title = "Numer of State Gun Control Laws"))
+      layout(yaxis = list(title = yaxis, zeroline = FALSE), xaxis = list(title = "Numer of State Gun Control Laws"),
+             title = title)
     
     return(p)
     
@@ -147,7 +141,7 @@ my_server <- function(input, output) {
   output$legislation_bar <- renderPlotly({
     shootings <- group_by(mass_shootings, state) %>%
       summarise(total_shootings = n())
-    legislation$state <- state_ab
+    legislation$state <- joined_data$state
     legislation <- merge(legislation, shootings, all = TRUE, by = "state")
     legislation[is.na(legislation)] <- 0
     legislation <- select(legislation, total_shootings, lawtotal, state)
