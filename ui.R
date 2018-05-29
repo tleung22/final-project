@@ -40,10 +40,14 @@ ui <- navbarPage(
         a("link", href = "https://wallethub.com/edu/happiest-states/6959/#methodology"),
         em("."),
         h3("Interactive Scatter Plot"),
+        br(),
         plotlyOutput("scatter_plot"),
         textOutput("cor"),
         textOutput("cor_message"),
+        br(),
+        p("The following map is color coded by happiness rank. Useful information such as the happiness rank out of all the states, gun industry rank, which ranks the states by how much a state relies on the firearm industry, and total victims of mass shootings."),
         h3("Interactive Map"),
+        br(),
         plotlyOutput("interactive_map")
       )
     )
