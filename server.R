@@ -178,7 +178,7 @@ my_server <- function(input, output) {
     legislation$state <- factor(legislation$state, levels = unique(legislation$state)[order(legislation$total_shootings, decreasing = TRUE)])
     p <- plot_ly(legislation, x = ~state, y = ~lawtotal, type = "bar", name = "legislation") %>%
       add_trace(y = ~total_shootings, name = "shootings") %>%
-      layout(yaxis = list(title = "Count"), barmode = "group")
+      layout(yaxis = list(title = "Count"), xaxis = list(title = "State"), title = "State Gun Control VS Mass Shootings", barmode = "group")
     
     return(p)
   })

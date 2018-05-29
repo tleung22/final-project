@@ -57,12 +57,32 @@ ui <- navbarPage(
     "Legislation",
     sidebarLayout(
       sidebarPanel(
-        radioButtons("legislation", label = h3("Radio buttons"),
+        radioButtons("legislation", label = h3("Legislation Comparrisons"),
           choices = list("Gun Industry" = 1, "Gun Ownership" = 2, "Violent Crime" = 3, "Murder & Manslaughter" = 4) 
           )
       ),
       mainPanel(
+        h1("Analyzing the effects of State Legislated Gun Control"),
+        em("Due to a lack of federal action, many have looked to state legislatures to pass gun control laws"),
+        em(" in order to stem the epidemic of gun violence in the country. But is this legislation effective"),
+        em(" in keeping our communities safe? And what might be keeping state legislatures from implementing"),
+        em(" this reform?"),
+        br(),
+        br(),
+        strong("DATA & METHODOLOGY:"),
+        br(),
+        a("Mother Jones mass shooting data", href = "https://www.motherjones.com/politics/2012/12/mass-shootings-mother-jones-full-data/"),
+        br(),
+        a("WalletHub gun industry data", href = "https://wallethub.com/edu/states-most-dependent-on-the-gun-industry/18719/"),
+        br(),
+        a("State Firearm Laws", href = "https://www.statefirearmlaws.org/table.html"),
+        br(),
+        a("State gun crime/ownership", href = "http://demographicdata.org/facts-and-figures/gun-ownership-statistics/"),
+        br(),
+        br(),
         plotlyOutput("legislation_bar"),
+        br(),
+        br(),
         plotlyOutput("legis_scatter"),
         textOutput("legis_cor"),
         textOutput("legis_cor_message")
