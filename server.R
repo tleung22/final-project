@@ -18,9 +18,9 @@ shootings <- mass_shootings %>%
   summarise(fatalities = sum(fatalities), injured = sum(injured),
             total_victims = sum(total_victims))
 joined_data <- merge(happiness, gun_industry, by = "state")
-joined_data <- full_join(joined_data, shootings)
-joined_data <- full_join(joined_data, state_deaths)
-joined_data <- full_join(joined_data, gun_ownership)
+joined_data <- full_join(joined_data, shootings, by = "state")
+joined_data <- full_join(joined_data, state_deaths, by = "state")
+joined_data <- full_join(joined_data, gun_ownership, by = "state")
 
 
 my_server <- function(input, output) {
@@ -58,11 +58,18 @@ my_server <- function(input, output) {
       y <- joined_data$percown
       title <- "Happiness Score by Percent of Gun Ownership"
       yaxis <- "Percent of Gun Ownership"
+      cor <- cor(joined_data$happiness_score, y)
     } else if (input$yaxis == "rate") {
       y <- joined_data$rate
       title <- "Happiness Score by Rate of Gun Related Deaths per 100k People"
       yaxis <- "Rate of Gun Related Deaths per 100k People"
+      cor <- cor(joined_data$happiness_score, y)
     }
+
+    
+    
+    
+    
     p <- plot_ly(data = joined_data,
                  x = joined_data$happiness_score,
                  color = I("black")
@@ -71,12 +78,33 @@ my_server <- function(input, output) {
                   text = paste(joined_data$state, "<br>", "Happiness Rank:",
                                joined_data$happiness_rank),
                   showlegend = FALSE) %>% 
-      add_lines(y = ~fitted(loess(y ~ happiness_score)),
+      add_lines(x = joined_data$happiness_score, y = fitted(lm(y ~ joined_data$happiness_score)),
                 line = list(color = "rgba(220, 0, 0, 0.62)"),
                 showlegend = FALSE) %>%
       layout(title = title,
              yaxis = list(title = yaxis, zeroline = FALSE),
              xaxis = list(title = "Happiness Score", zeroline = FALSE))
+  })
+  
+  output$cor <- renderText({
+    if (input$yaxis == "percown") {
+      y <- joined_data$percown
+      cor <- cor(joined_data$happiness_score, y)
+    } else if (input$yaxis == "rate") {
+      y <- joined_data$rate
+      cor <- cor(joined_data$happiness_score, y)
+    }
+    correlation <- paste("Correlation:", cor)
+    return(correlation)
+  })
+  
+  output$cor_message <- renderText({
+    if (input$yaxis == "percown") {
+      message <- "This negative correlation shows that the higher the happiness score, the lower the percentage of gun ownership."
+    } else if (input$yaxis == "rate") {
+      message <- "This negative correlation shows that the higher the happiness score, the lower the rate of deaths per 100k people."
+    }
+    return(message)
   })
 
   #state abbreviations

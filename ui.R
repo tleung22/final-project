@@ -24,10 +24,25 @@ ui <- navbarPage(
         )
       ),
       mainPanel(
+        
         h1("Comparing State Happiness with Gun Related Data"),
-        p("Description of happiness score and other useful infomation. Describe the importance/significance of comparing happiness with gun data. Describe what questions this page is trying to answer."),
+        em("Are happier states "), strong("safer"),
+        em("? We took data from wallet hub where they took in multiple factors "),
+        em("like depression rates and average income to calculate a happiness score "),
+        em("for each state. We compared the happiness scores from this data with the "),
+        a("percentages of gun ownership per state",
+          href = "http://demographicdata.org/facts-and-figures/gun-ownership-statistics/"),
+        em(" and the "),
+        a("rate of gun related deaths per 100k people",
+          href = "https://www.cdc.gov/nchs/pressroom/sosmap/firearm_mortality/firearm.htm"),
+        em(" to to make insightful conclusions about the correlations between these variables. "),
+        em("In order to learn more about how happiness score was calculated, follow this "),
+        a("link", href = "https://wallethub.com/edu/happiest-states/6959/#methodology"),
+        em("."),
         h3("Interactive Scatter Plot"),
         plotlyOutput("scatter_plot"),
+        textOutput("cor"),
+        textOutput("cor_message"),
         h3("Interactive Map"),
         plotlyOutput("interactive_map")
       )
