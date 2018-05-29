@@ -1,8 +1,12 @@
 library(shiny)
 library(dplyr)
 library(plotly)
+library(shinythemes)
 
 ui <- navbarPage(
+  # returns a theme
+  theme=shinytheme("slate"),
+  
   "Application Title",
   
   
@@ -147,9 +151,10 @@ ui <- navbarPage(
     )
   )
   
-  
-  
 )
+
+
+
 
 
 
