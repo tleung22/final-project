@@ -16,9 +16,9 @@ ui <- navbarPage(
     "Happiness",
     sidebarLayout(
       sidebarPanel(
-        radioButtons("yaxis", "View Happiness Score by Rate of Gun Related Deaths per 100k People OR Percent of Gun Ownership:",
-                     choiceNames = c("Rate of Gun Related Deaths per 100k People", "Percent of Gun Ownership"),
-                     choiceValues = c("rate", "percown")
+        radioButtons("yaxis", "View Happiness Score by Rate of Gun Related Deaths per 100k People, Percent of Gun Ownership, or the Count of Gun Control Laws:",
+                     choiceNames = c("Rate of Gun Related Deaths per 100k People", "Percent of Gun Ownership", "Count of Gun Control Laws"),
+                     choiceValues = c("rate", "percown", "lawtotal")
                      
                      
         )
@@ -32,10 +32,13 @@ ui <- navbarPage(
         em("for each state. We compared the happiness scores from this data with the "),
         a("percentages of gun ownership per state",
           href = "http://demographicdata.org/facts-and-figures/gun-ownership-statistics/"),
-        em(" and the "),
+        em(", "),
         a("rate of gun related deaths per 100k people",
           href = "https://www.cdc.gov/nchs/pressroom/sosmap/firearm_mortality/firearm.htm"),
-        em(" to to make insightful conclusions about the correlations between these variables. "),
+        em(" and the "),
+        a("count of gun control laws",
+          href = "https://www.statefirearmlaws.org/table.html"),
+        em(" to make insightful conclusions and correlations between these variables. "),
         em("In order to learn more about how happiness score was calculated, follow this "),
         a("link", href = "https://wallethub.com/edu/happiest-states/6959/#methodology"),
         em("."),

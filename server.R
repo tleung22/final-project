@@ -61,20 +61,17 @@ my_server <- function(input, output) {
       y <- joined_data$percown
       title <- "Happiness Score by Percent of Gun Ownership"
       yaxis <- "Percent of Gun Ownership"
-      cor <- cor(joined_data$happiness_score, y)
     } else if (input$yaxis == "rate") {
       y <- joined_data$rate
       title <- "Happiness Score by Rate of Gun Related Deaths per 100k People"
       yaxis <- "Rate of Gun Related Deaths per 100k People"
-      cor <- cor(joined_data$happiness_score, y)
+    } else if (input$yaxis == "lawtotal") {
+      y <- legislation$lawtotal
+      title <- "Happiness Score by Count of Gun Control Laws"
+      yaxis <- "Count of Gun Control Laws"
     }
-
     
-    
-    
-    
-    p <- plot_ly(data = joined_data,
-                 x = joined_data$happiness_score,
+    p <- plot_ly(x = joined_data$happiness_score,
                  color = I("black")
                 ) %>%
       add_markers(y = y,
@@ -96,6 +93,9 @@ my_server <- function(input, output) {
     } else if (input$yaxis == "rate") {
       y <- joined_data$rate
       cor <- cor(joined_data$happiness_score, y)
+    } else if (input$yaxis == "lawtotal") {
+      y <- legislation$lawtotal
+      cor <- cor(joined_data$happiness_score, y)
     }
     correlation <- paste("Correlation:", cor)
     return(correlation)
@@ -106,6 +106,8 @@ my_server <- function(input, output) {
       message <- "This negative correlation shows that the higher the happiness score, the lower the percentage of gun ownership."
     } else if (input$yaxis == "rate") {
       message <- "This negative correlation shows that the higher the happiness score, the lower the rate of deaths per 100k people."
+    } else if (input$yaxis == "lawtotal") {
+      message <- "This positive correlation shows that there is an association between higher happiness score and a higher count of gun control laws."
     }
     return(message)
   })
