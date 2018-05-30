@@ -71,7 +71,8 @@ my_server <- function(input, output) {
       add_trace(
         z = joined_data$happiness_score, text = joined_data$hover,
         locations = joined_data$state,
-        color = joined_data$happiness_score, colors = "Reds"
+        color = joined_data$happiness_score, colors = "Reds",
+        reversescale = TRUE
       ) %>%
       colorbar(title = "Happiness Score") %>%
       layout(
