@@ -85,7 +85,7 @@ ui <- navbarPage(
   tabPanel(
     "Happiness",
     sidebarLayout(
-      sidebarPanel(
+      sidebarPanel( # options for y axis
         radioButtons("yaxis", "View Happiness Score by Rate of
                      Gun Related Deaths per 100k People,
                      Percent of Gun Ownership, or the
@@ -100,6 +100,7 @@ ui <- navbarPage(
     mainPanel(
       div(
         class = "center",
+        # Intoduction of tab
         h1("Comparing State Happiness with Gun Related Data"),
         em("Are happier states "), strong("safer"),
         em("? We took data from wallet hub where
@@ -132,9 +133,11 @@ ui <- navbarPage(
         br(),
         plotlyOutput("scatter_plot"),
         br(),
+        # Adds correlation and what it means
         textOutput("cor"),
         textOutput("cor_message"),
         br(),
+        # interactive map description and visualization
         p("The following map is color coded by happiness rank.
           Useful information such as
           the happiness rank out of all the states, gun industry rank,
@@ -148,7 +151,8 @@ ui <- navbarPage(
         )
         )
         ),
-  # Legislation
+  
+  # Legislation tab
   tabPanel(
     "Legislation",
     sidebarLayout(
