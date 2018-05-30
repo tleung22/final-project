@@ -4,8 +4,9 @@ library(dplyr)
 library(plotly)
 
 mass_shootings <-
-  read.csv("Data/Mother Jones - Mass Shootings Database, 1982 - 2018 - Sheet1.csv",
-           stringsAsFactors = FALSE
+  read.csv(
+    "Data/Mother Jones - Mass Shootings Database, 1982 - 2018 - Sheet1.csv",
+    stringsAsFactors = FALSE
   )
 happiness <- read.csv("Data/state_happiness.csv",
                       stringsAsFactors = FALSE
@@ -57,8 +58,7 @@ my_server <- function(input, output) {
       "<br>", "Gun Industry Rank:", industry_rank,
       "<br>", "Total Victims:", total_victims
     ))
-    
-    l <- list(color = toRGB("white"), width = 2)
+
     # specify some map projection/options
     g <- list(
       scope = "usa",
@@ -66,7 +66,7 @@ my_server <- function(input, output) {
       showlakes = TRUE,
       lakecolor = toRGB("white")
     )
-    
+
     map <- plot_geo(joined_data, locationmode = "USA-states") %>%
       add_trace(
         z = joined_data$happiness_score, text = joined_data$hover,
@@ -75,12 +75,13 @@ my_server <- function(input, output) {
       ) %>%
       colorbar(title = "Happiness Score") %>%
       layout(
+        margin = list(l = 50, r = 50, b = 50, t = 50),
         title = "Happiness and Gun Related Data for Each State",
         geo = g
       )
     return(map)
   })
-  
+
   # Scatter plot
   output$scatter_plot <- renderPlotly({
     if (input$yaxis == "percown") {
@@ -96,7 +97,7 @@ my_server <- function(input, output) {
       title <- "Happiness Score by Count of Gun Control Laws"
       yaxis <- "Count of Gun Control Laws"
     }
-    
+
     p <- plot_ly(
       x = joined_data$happiness_score,
       color = I("black")
@@ -116,12 +117,13 @@ my_server <- function(input, output) {
         showlegend = FALSE
       ) %>%
       layout(
+        margin = list(l = 50, r = 50, b = 50, t = 50),
         title = title,
         yaxis = list(title = yaxis, zeroline = FALSE),
         xaxis = list(title = "Happiness Score", zeroline = FALSE)
       )
   })
-  
+
   output$cor <- renderText({
     if (input$yaxis == "percown") {
       y <- joined_data$percown
@@ -136,7 +138,7 @@ my_server <- function(input, output) {
     correlation <- paste("Correlation:", cor)
     return(correlation)
   })
-  
+
   output$cor_message <- renderText({
     if (input$yaxis == "percown") {
       message <- "This negative correlation shows that the higher the happiness
@@ -150,7 +152,7 @@ my_server <- function(input, output) {
     }
     return(message)
     })
-  
+
   output$legis_scatter <- renderPlotly({
     if (input$legislation == 1) {
       y <- legislation$industry_score
@@ -169,18 +171,20 @@ my_server <- function(input, output) {
       title <- "State Gun Legislation vs State Murder & Manslaughter per 100K"
       yaxis <- "State Murder & Manslaughter per 100,000"
     }
-    p <- plot_ly(legislation, x = ~ lawtotal) %>%
+    p <- plot_ly(legislation, x = ~ lawtotal, color = I("black")) %>%
       add_markers(y = y, text = legislation$state, showlegend = FALSE) %>%
-      add_lines(x = ~ lawtotal, y = ~ fitted(loess(y ~ lawtotal))) %>%
+      add_lines(x = ~ lawtotal, y = ~ fitted(loess(y ~ lawtotal)),
+        line = list(color = "rgba(220, 0, 0, 0.62)")) %>%
       layout(
+        margin = list(l = 50, r = 50, b = 50, t = 50),
         yaxis = list(title = yaxis, zeroline = FALSE),
         xaxis = list(title = "Numer of State Gun Control Laws"),
         title = title
       )
-    
+
     return(p)
   })
-  
+
   output$legis_cor <- renderText({
     if (input$legislation == 1) {
       y <- legislation$industry_score
@@ -198,7 +202,7 @@ my_server <- function(input, output) {
     correlation <- paste("Correlation:", cor)
     return(correlation)
   })
-  
+
   output$legis_cor_message <- renderText({
     if (input$legislation == 1) {
       message <- "This moderate negative correlation shows that state
@@ -215,7 +219,7 @@ my_server <- function(input, output) {
     }
     return(message)
     })
-  
+
   output$legislation_bar <- renderPlotly({
     shootings <- group_by(mass_shootings, state) %>%
       summarise(total_shootings = n())
@@ -223,22 +227,24 @@ my_server <- function(input, output) {
     legislation[is.na(legislation)] <- 0
     legislation <- select(legislation, total_shootings, lawtotal, state)
     legislation$state <- factor(legislation$state,
-                                levels = unique(legislation$state)
-                                [order(legislation$total_shootings, decreasing = TRUE)]
+      levels = unique(legislation$state)
+      [order(legislation$total_shootings, decreasing = TRUE)]
     )
     p <- plot_ly(legislation,
+                 marker = list(color = I("black")),
                  x = ~ state, y = ~ lawtotal,
                  type = "bar", name = "legislation"
     ) %>%
-      add_trace(y = ~ total_shootings, name = "shootings") %>%
+      add_trace(y = ~ total_shootings, name = "shootings",
+                marker = list(color = "rgba(220, 0, 0, 0.62)")) %>%
       layout(
+        margin = list(l = 50, r = 50, b = 50, t = 50),
         yaxis = list(title = "Count"), xaxis = list(title = "State"),
         title = "State Gun Control VS Mass Shootings", barmode = "group"
       )
-    
+
     return(p)
   })
 }
 
 shinyServer(my_server)
-

@@ -7,7 +7,7 @@ ui <- navbarPage(
   # returns a theme
   theme = shinytheme("slate"),
   "Law, Happiness, & Gun Violence",
-  
+
   # Introduction tab
   tabPanel(
     "Introduction",
@@ -80,7 +80,7 @@ ui <- navbarPage(
       )
     )
       ),
-  
+
   # Happiness tab
   tabPanel(
     "Happiness",
@@ -131,6 +131,7 @@ ui <- navbarPage(
         h3("Interactive Scatter Plot"),
         br(),
         plotlyOutput("scatter_plot"),
+        br(),
         textOutput("cor"),
         textOutput("cor_message"),
         br(),
@@ -197,6 +198,7 @@ ui <- navbarPage(
           br(),
           br(),
           plotlyOutput("legis_scatter"),
+          br(),
           textOutput("legis_cor"),
           textOutput("legis_cor_message"),
           br(),
@@ -206,17 +208,17 @@ ui <- navbarPage(
           )
           )
   ),
-  
+
   # References
   tabPanel(
     "References",
     tags$div(tags$ul(
       tags$li(a("WalletHub",
-                href = "https://wallethub.com/edu/happiest-states/6959/#methodology"
+        href = "https://wallethub.com/edu/happiest-states/6959/#methodology"
       )),
       br(),
       tags$li(a("DemographicData.org",
-                href = "https://wallethub.com/edu/happiest-states/6959/#methodology"
+        href = "https://wallethub.com/edu/happiest-states/6959/#methodology"
       )),
       br(),
       tags$li(a("Centers for Disease Control and Prevention",
@@ -249,45 +251,4 @@ ui <- navbarPage(
       ))
       )
       )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 shinyUI(ui)
-
-
-
-
-
-
-
-
-
-
-
-
-
