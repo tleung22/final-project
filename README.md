@@ -1,6 +1,6 @@
 # Final Project Website:
-https://logan-selley.shinyapps.io/final-project/
-This is the link to our final project.
+This is the link to our final project: https://logan-selley.shinyapps.io/final-project/
+
 
 ## Project Description - Jose, Varun, Logan, Trevor
 
