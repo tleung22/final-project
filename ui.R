@@ -148,11 +148,11 @@ ui <- navbarPage(
         )
         )
         ),
-  # bar chart
+  # Legislation
   tabPanel(
     "Legislation",
     sidebarLayout(
-      sidebarPanel(
+      sidebarPanel( # Options for scatter
         radioButtons("legislation",
                      label = h3("Legislation Comparisons"),
                      choices = list(
@@ -164,6 +164,7 @@ ui <- navbarPage(
       ),
       mainPanel(
         div(
+          #intro
           class = "center",
           h1("Analyzing the effects of State Legislated Gun Control"),
           em("Due to a lack of federal action, many have looked to state
@@ -175,6 +176,7 @@ ui <- navbarPage(
           em(" this reform?"),
           br(),
           br(),
+          #Data
           strong("DATA & METHODOLOGY:"),
           br(),
           a("Mother Jones mass shooting data",
@@ -197,12 +199,14 @@ ui <- navbarPage(
           ),
           br(),
           br(),
+          #Interactive scatter
           plotlyOutput("legis_scatter"),
           br(),
           textOutput("legis_cor"),
           textOutput("legis_cor_message"),
           br(),
           br(),
+          #Static Bar
           plotlyOutput("legislation_bar")
           )
           )

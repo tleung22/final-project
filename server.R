@@ -1,8 +1,9 @@
-
+#Required Libraries
 library(shiny)
 library(dplyr)
 library(plotly)
 
+# Read in Data
 mass_shootings <-
   read.csv(
     "Data/Mother Jones - Mass Shootings Database, 1982 - 2018 - Sheet1.csv",
@@ -31,6 +32,7 @@ state_deaths <- read.csv("Data/firearm2016.csv",
                          stringsAsFactors = FALSE
 )
 
+#Combine and clean data
 shootings <- mass_shootings %>%
   group_by(state) %>%
   summarise(
@@ -50,7 +52,9 @@ crime <- select(
 )
 legislation <- merge(legislation, crime, by = "state")
 
+
 my_server <- function(input, output) {
+  #Happiness map
   output$interactive_map <- renderPlotly({
     joined_data$hover <- with(joined_data, paste(
       state, "<br>",
@@ -82,7 +86,7 @@ my_server <- function(input, output) {
     return(map)
   })
 
-  # Scatter plot
+  # Happiness Scatter plot
   output$scatter_plot <- renderPlotly({
     if (input$yaxis == "percown") {
       y <- joined_data$percown
@@ -123,7 +127,8 @@ my_server <- function(input, output) {
         xaxis = list(title = "Happiness Score", zeroline = FALSE)
       )
   })
-
+  
+  #Happiness Scatter correlation data
   output$cor <- renderText({
     if (input$yaxis == "percown") {
       y <- joined_data$percown
@@ -139,6 +144,7 @@ my_server <- function(input, output) {
     return(correlation)
   })
 
+  # Happiness Scatter correlation conclusions
   output$cor_message <- renderText({
     if (input$yaxis == "percown") {
       message <- "This negative correlation shows that the higher the happiness
@@ -153,6 +159,7 @@ my_server <- function(input, output) {
     return(message)
     })
 
+  #legislation scatter plots
   output$legis_scatter <- renderPlotly({
     if (input$legislation == 1) {
       y <- legislation$industry_score
@@ -185,6 +192,7 @@ my_server <- function(input, output) {
     return(p)
   })
 
+  # correlation stats for legislation scatter
   output$legis_cor <- renderText({
     if (input$legislation == 1) {
       y <- legislation$industry_score
@@ -202,7 +210,8 @@ my_server <- function(input, output) {
     correlation <- paste("Correlation:", cor)
     return(correlation)
   })
-
+  
+  #Data conclusion for each legislation scatter
   output$legis_cor_message <- renderText({
     if (input$legislation == 1) {
       message <- "This moderate negative correlation shows that state
@@ -220,6 +229,7 @@ my_server <- function(input, output) {
     return(message)
     })
 
+  #Legislation bar chart
   output$legislation_bar <- renderPlotly({
     shootings <- group_by(mass_shootings, state) %>%
       summarise(total_shootings = n())
