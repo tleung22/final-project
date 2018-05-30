@@ -90,7 +90,9 @@ ui <- navbarPage(
           em("."),
           h3("Interactive Scatter Plot"),
           br(),
-          plotlyOutput("scatter_plot"),
+          div( class = "plot",
+            plotlyOutput("scatter_plot")
+          ),
           textOutput("cor"),
           textOutput("cor_message"),
           br(),
@@ -98,7 +100,9 @@ ui <- navbarPage(
           h3("Interactive Map")
         ),
         br(),
-        plotlyOutput("interactive_map")
+        div( class = "plot",
+          plotlyOutput("interactive_map")
+        )
       )
     )
   ),
@@ -131,12 +135,16 @@ ui <- navbarPage(
           a("State gun crime/ownership", href = "http://demographicdata.org/facts-and-figures/gun-ownership-statistics/"),
           br(),
           br(),
-          plotlyOutput("legis_scatter"),
+          div( class = "plot",
+            plotlyOutput("legis_scatter")
+          ),
           textOutput("legis_cor"),
           textOutput("legis_cor_message"),
           br(),
           br(),
-          plotlyOutput("legislation_bar")
+          div( class = "plot",
+            plotlyOutput("legislation_bar")
+          )
         )
       )
     )

@@ -52,7 +52,8 @@ my_server <- function(input, output) {
       colorbar(title = "Happiness Score") %>%
       layout(
         title = "Happiness and Gun Related Data for Each State",
-        geo = g
+        geo = g,
+        margin = list(l = 50, r = 50, b = 50, t = 50)
       )
     return(map)
   })
@@ -85,7 +86,8 @@ my_server <- function(input, output) {
                 showlegend = FALSE) %>%
       layout(title = title,
              yaxis = list(title = yaxis, zeroline = FALSE),
-             xaxis = list(title = "Happiness Score", zeroline = FALSE))
+             xaxis = list(title = "Happiness Score", zeroline = FALSE),
+             margin = list(l = 50, r = 50, b = 50, t = 50))
   })
   
   output$cor <- renderText({
@@ -137,7 +139,7 @@ my_server <- function(input, output) {
       add_lines(x = ~lawtotal, y = ~fitted(loess(y ~ lawtotal)),
                 line = list(color = "rgba(220, 0, 0, 0.62)")) %>%
       layout(yaxis = list(title = yaxis, zeroline = FALSE), xaxis = list(title = "Numer of State Gun Control Laws"),
-             title = title)
+             title = title, margin = list(l = 50, r = 50, b = 50, t = 50))
     
     return(p)
     
@@ -183,7 +185,8 @@ my_server <- function(input, output) {
     legislation$state <- factor(legislation$state, levels = unique(legislation$state)[order(legislation$total_shootings, decreasing = TRUE)])
     p <- plot_ly(legislation, x = ~state, y = ~lawtotal, type = "bar", name = "legislation", color = I("black")) %>%
       add_trace(y = ~total_shootings, name = "shootings", color = I("red")) %>%
-      layout(yaxis = list(title = "Count"), xaxis = list(title = "State"), title = "State Gun Control VS Mass Shootings", barmode = "group")
+      layout(yaxis = list(title = "Count"), xaxis = list(title = "State"), title = "State Gun Control VS Mass Shootings", barmode = "group",
+             margin = list(l = 50, r = 50, b = 50, t = 50))
     
     return(p)
   })
